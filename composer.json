@@ -1,0 +1,11 @@
+{
+  "name": "chrisjezowiczllc/wpforms-captcha",
+  "description": "",
+  "keywords": ["wordpress", "plugin"],
+  "homepage": "https://bitbucket.org/chrisjezowiczllc/wpforms-captcha/",
+  "authors": [],
+  "type": "wordpress-plugin",
+  "require": {
+    "php": ">=5.6"
+  }
+}
