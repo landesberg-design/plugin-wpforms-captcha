@@ -1,4 +1,4 @@
-# Copyright (C) 2019 WPForms Custom Captcha
+# Copyright (C) 2021 WPForms Custom Captcha
 # This file is distributed under the same license as the WPForms Custom Captcha package.
 msgid ""
 msgstr ""
@@ -14,46 +14,54 @@ msgstr ""
 "X-Poedit-SourceCharset: UTF-8\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
-#: class-captcha.php:40
-msgid "Captcha"
+#: class-captcha.php:36
+msgid "Custom Captcha"
 msgstr ""
 
-#: class-captcha.php:52
+#: class-captcha.php:48
 msgid "What is 7+4?"
 msgstr ""
 
-#: class-captcha.php:53
+#: class-captcha.php:49
 msgid "11"
 msgstr ""
 
-#: class-captcha.php:119
+#: class-captcha.php:118
 msgid "Incorrect answer."
 msgstr ""
 
-#: class-captcha.php:295
+#: class-captcha.php:297
+msgid "Type"
+msgstr ""
+
+#: class-captcha.php:298
+msgid "Select type of captcha to use."
+msgstr ""
+
+#: class-captcha.php:309
 msgid "Math"
 msgstr ""
 
-#: class-captcha.php:296
+#: class-captcha.php:310
 msgid "Question and Answer"
 msgstr ""
 
-#: class-captcha.php:316
+#: class-captcha.php:331
 msgid "Questions and Answers"
 msgstr ""
 
-#: class-captcha.php:317
+#: class-captcha.php:332
 msgid "Add questions to ask the user. Questions are randomly selected."
 msgstr ""
 
-#: class-captcha.php:329
+#: class-captcha.php:345
 msgid "Question"
 msgstr ""
 
-#: class-captcha.php:331
+#: class-captcha.php:347
 msgid "Answer"
 msgstr ""
 
-#: class-captcha.php:565, class-captcha.php:581
+#: class-captcha.php:587, class-captcha.php:603
 msgid "Incorrect answer"
 msgstr ""

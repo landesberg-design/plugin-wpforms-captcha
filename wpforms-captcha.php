@@ -1,13 +1,15 @@
 <?php
 /**
- * Plugin Name: WPForms Custom Captcha
- * Plugin URI:  https://wpforms.com
- * Description: Captcha fields with WPForms.
- * Author:      WPForms
- * Author URI:  https://wpforms.com
- * Version:     1.3.0
- * Text Domain: wpforms-captcha
- * Domain Path: languages
+ * Plugin Name:       WPForms Custom Captcha
+ * Plugin URI:        https://wpforms.com
+ * Description:       Captcha fields with WPForms.
+ * Requires at least: 4.9
+ * Requires PHP:      5.5
+ * Author:            WPForms
+ * Author URI:        https://wpforms.com
+ * Version:           1.3.1
+ * Text Domain:       wpforms-captcha
+ * Domain Path:       languages
  *
  * WPForms is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -20,12 +22,7 @@
  * GNU General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
- * along with WPForms. If not, see <http://www.gnu.org/licenses/>.
- *
- * @package    WPFormsCaptcha
- * @since      1.0.0
- * @license    GPL-2.0+
- * @copyright  Copyright (c) 2016, WP Forms LLC
+ * along with WPForms. If not, see <https://www.gnu.org/licenses/>.
  */
 
 // Exit if accessed directly.
@@ -34,7 +31,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 // Plugin version.
-define( 'WPFORMS_CAPTCHA_VERSION', '1.3.0' );
+define( 'WPFORMS_CAPTCHA_VERSION', '1.3.1' );
 
 /**
  * Load the provider class.
@@ -44,7 +41,7 @@ define( 'WPFORMS_CAPTCHA_VERSION', '1.3.0' );
 function wpforms_captcha() {
 
 	// WPForms Pro is required.
-	if ( ! class_exists( 'WPForms_Pro', true ) ) {
+	if ( ! wpforms()->pro ) {
 		return;
 	}
 
@@ -64,7 +61,7 @@ add_action( 'wpforms_loaded', 'wpforms_captcha' );
 function wpforms_captcha_updater( $key ) {
 
 	new WPForms_Updater(
-		array(
+		[
 			'plugin_name' => 'WPForms Captcha',
 			'plugin_slug' => 'wpforms-captcha',
 			'plugin_path' => plugin_basename( __FILE__ ),
@@ -72,7 +69,7 @@ function wpforms_captcha_updater( $key ) {
 			'remote_url'  => WPFORMS_UPDATER_API,
 			'version'     => WPFORMS_CAPTCHA_VERSION,
 			'key'         => $key,
-		)
+		]
 	);
 }
 add_action( 'wpforms_updater', 'wpforms_captcha_updater' );

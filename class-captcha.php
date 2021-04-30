@@ -3,11 +3,7 @@
 /**
  * Captcha field.
  *
- * @package    WPFormsCaptcha
- * @author     WPForms
- * @since      1.0.0
- * @license    GPL-2.0+
- * @copyright  Copyright (c) 2016, WPForms LLC
+ * @since 1.0.0
  */
 class WPForms_Captcha_Field extends WPForms_Field {
 
@@ -37,44 +33,47 @@ class WPForms_Captcha_Field extends WPForms_Field {
 	public function init() {
 
 		// Define field type information.
-		$this->name  = esc_html__( 'Captcha', 'wpforms-captcha' );
+		$this->name  = esc_html__( 'Custom Captcha', 'wpforms-captcha' );
 		$this->type  = 'captcha';
 		$this->icon  = 'fa-question-circle';
 		$this->order = 300;
 		$this->group = 'fancy';
-		$this->math  = array(
+		$this->math  = [
 			'min' => 1,
 			'max' => 15,
-			'cal' => array( '+', '*' ),
-		);
-		$this->qs    = array(
-			1 => array(
+			'cal' => [ '+', '*' ],
+		];
+		$this->qs    = [
+			1 => [
 				'question' => esc_html__( 'What is 7+4?', 'wpforms-captcha' ),
 				'answer'   => esc_html__( '11', 'wpforms-captcha' ),
-			),
-			2 => array(
+			],
+			2 => [
 				'question' => '',
 				'answer'   => '',
-			),
-		);
+			],
+		];
 
 		// Apply wpforms_math_captcha filters when theme functions.php is loaded.
-		add_action( 'after_setup_theme', array( $this, 'after_setup_theme' ) );
+		add_action( 'after_setup_theme', [ $this, 'after_setup_theme' ] );
 
 		// Form frontend javascript.
-		add_action( 'wpforms_frontend_js', array( $this, 'frontend_js' ) );
+		add_action( 'wpforms_frontend_js', [ $this, 'frontend_js' ] );
 
 		// Admin form builder enqueues.
-		add_action( 'wpforms_builder_enqueues', array( $this, 'admin_builder_enqueues' ) );
+		add_action( 'wpforms_builder_enqueues', [ $this, 'admin_builder_enqueues' ] );
 
 		// Remove the field from saved data.
-		add_filter( 'wpforms_process_after_filter', array( $this, 'process_remove_field' ), 10, 3 );
+		add_filter( 'wpforms_process_after_filter', [ $this, 'process_remove_field' ], 10, 3 );
 
 		// Set field to default to required.
-		add_filter( 'wpforms_field_new_required', array( $this, 'field_default_required' ), 10, 2 );
+		add_filter( 'wpforms_field_new_required', [ $this, 'field_default_required' ], 10, 2 );
 
 		// Define additional field properties.
-		add_filter( 'wpforms_field_properties_captcha', array( $this, 'field_properties' ), 5, 3 );
+		add_filter( 'wpforms_field_properties_captcha', [ $this, 'field_properties' ], 5, 3 );
+
+		// Dont display this field on the entry edit admin page.
+		add_filter( 'wpforms_pro_admin_entries_edit_fields_dont_display', [ $this, 'entries_edit_fields_dont_display' ] );
 	}
 
 	/**
@@ -98,8 +97,8 @@ class WPForms_Captcha_Field extends WPForms_Field {
 	public function frontend_js( $forms ) {
 
 		if (
-			wpforms()->frontend->assets_global() ||
-			true === wpforms_has_field_type( 'captcha', $forms, true )
+			wpforms_has_field_type( 'captcha', $forms, true ) === true ||
+			wpforms()->frontend->assets_global()
 		) {
 
 			$min = wpforms_get_min_suffix();
@@ -107,23 +106,24 @@ class WPForms_Captcha_Field extends WPForms_Field {
 			wp_enqueue_script(
 				'wpforms-captcha',
 				plugin_dir_url( __FILE__ ) . "assets/js/wpforms-captcha{$min}.js",
-				array( 'jquery', 'wpforms' ),
+				[ 'jquery', 'wpforms' ],
 				WPFORMS_CAPTCHA_VERSION,
 				true
 			);
 
-			$strings = array(
+			$strings = [
 				'max'      => $this->math['max'],
 				'min'      => $this->math['min'],
 				'cal'      => $this->math['cal'],
 				'errorMsg' => esc_html__( 'Incorrect answer.', 'wpforms-captcha' ),
-			);
+			];
+
 			wp_localize_script( 'wpforms-captcha', 'wpforms_captcha', $strings );
 		}
 	}
 
 	/**
-	 * Enqueues for the admin form builder.
+	 * Enqueue for the admin form builder.
 	 *
 	 * @since 1.0.0
 	 */
@@ -135,7 +135,7 @@ class WPForms_Captcha_Field extends WPForms_Field {
 		wp_enqueue_script(
 			'wpforms-builder-custom-captcha',
 			plugin_dir_url( __FILE__ ) . "assets/js/admin-builder-captcha{$min}.js",
-			array( 'jquery', 'wpforms-builder' ),
+			[ 'jquery', 'wpforms-builder' ],
 			WPFORMS_CAPTCHA_VERSION
 		);
 
@@ -143,7 +143,7 @@ class WPForms_Captcha_Field extends WPForms_Field {
 		wp_enqueue_style(
 			'wpforms-builder-custom-captcha',
 			plugin_dir_url( __FILE__ ) . "assets/css/admin-builder-captcha{$min}.css",
-			array(),
+			[],
 			WPFORMS_CAPTCHA_VERSION
 		);
 	}
@@ -177,7 +177,14 @@ class WPForms_Captcha_Field extends WPForms_Field {
 	}
 
 	/**
-	 * @inheritdoc
+	 * Whether current field can be populated dynamically.
+	 *
+	 * @since 1.5.0
+	 *
+	 * @param array $properties Field properties.
+	 * @param array $field      Current field specific data.
+	 *
+	 * @return bool
 	 */
 	public function is_dynamic_population_allowed( $properties, $field ) {
 
@@ -185,7 +192,14 @@ class WPForms_Captcha_Field extends WPForms_Field {
 	}
 
 	/**
-	 * @inheritdoc
+	 * Whether current field can be populated dynamically.
+	 *
+	 * @since 1.5.0
+	 *
+	 * @param array $properties Field properties.
+	 * @param array $field      Current field specific data.
+	 *
+	 * @return bool
 	 */
 	public function is_fallback_population_allowed( $properties, $field ) {
 
@@ -204,7 +218,7 @@ class WPForms_Captcha_Field extends WPForms_Field {
 	 */
 	public function field_default_required( $required, $field ) {
 
-		if ( 'captcha' === $field['type'] ) {
+		if ( $field['type'] === 'captcha' ) {
 			return true;
 		}
 
@@ -226,7 +240,7 @@ class WPForms_Captcha_Field extends WPForms_Field {
 
 		foreach ( $fields as $id => $field ) {
 			// Remove captcha from saved data.
-			if ( 'captcha' === $field['type'] ) {
+			if ( ! empty( $field['type'] ) && $field['type'] === 'captcha' ) {
 				unset( $fields[ $id ] );
 			}
 		}
@@ -251,11 +265,11 @@ class WPForms_Captcha_Field extends WPForms_Field {
 		$this->field_element(
 			'text',
 			$field,
-			array(
+			[
 				'type'  => 'hidden',
 				'slug'  => 'required',
 				'value' => '1',
-			)
+			]
 		);
 
 		/*
@@ -266,9 +280,9 @@ class WPForms_Captcha_Field extends WPForms_Field {
 		$this->field_option(
 			'basic-options',
 			$field,
-			array(
+			[
 				'markup' => 'open',
-			)
+			]
 		);
 
 		// Label.
@@ -278,44 +292,45 @@ class WPForms_Captcha_Field extends WPForms_Field {
 		$lbl = $this->field_element(
 			'label',
 			$field,
-			array(
+			[
 				'slug'    => 'format',
-				'value'   => esc_html__( 'Type', 'wpforms_math_captcha' ),
-				'tooltip' => esc_html__( 'Select type of captcha to use.', 'wpforms_math_captcha' ),
-			),
+				'value'   => esc_html__( 'Type', 'wpforms-captcha' ),
+				'tooltip' => esc_html__( 'Select type of captcha to use.', 'wpforms-captcha' ),
+			],
 			false
 		);
 		$fld = $this->field_element(
 			'select',
 			$field,
-			array(
+			[
 				'slug'    => 'format',
 				'value'   => $format,
-				'options' => array(
+				'options' => [
 					'math' => esc_html__( 'Math', 'wpforms-captcha' ),
 					'qa'   => esc_html__( 'Question and Answer', 'wpforms-captcha' ),
-				),
-			),
+				],
+			],
 			false
 		);
+
 		$this->field_element(
 			'row',
 			$field,
-			array(
+			[
 				'slug'    => 'format',
 				'content' => $lbl . $fld,
-			)
+			]
 		);
 
 		// Questions.
 		$lbl = $this->field_element(
 			'label',
 			$field,
-			array(
+			[
 				'slug'    => 'questions',
 				'value'   => esc_html__( 'Questions and Answers', 'wpforms-captcha' ),
 				'tooltip' => esc_html__( 'Add questions to ask the user. Questions are randomly selected.', 'wpforms-captcha' ),
-			),
+			],
 			false
 		);
 		$fld = sprintf(
@@ -324,6 +339,7 @@ class WPForms_Captcha_Field extends WPForms_Field {
 			esc_attr( $field['id'] ),
 			esc_attr( $this->type )
 		);
+
 		foreach ( $qs as $key => $value ) {
 			$fld .= '<li data-key="' . absint( $key ) . '">';
 			$fld .= sprintf( '<input type="text" name="fields[%s][questions][%s][question]" value="%s" class="question" placeholder="%s">', $field['id'], $key, esc_attr( $value['question'] ), esc_html__( 'Question', 'wpforms-captcha' ) );
@@ -332,14 +348,15 @@ class WPForms_Captcha_Field extends WPForms_Field {
 			$fld .= '</li>';
 		}
 		$fld .= '</ul>';
+
 		$this->field_element(
 			'row',
 			$field,
-			array(
+			[
 				'slug'    => 'questions',
 				'content' => $lbl . $fld,
-				'class'   => 'math' === $format ? 'wpforms-hidden' : '',
-			)
+				'class'   => $format === 'math' ? 'wpforms-hidden' : '',
+			]
 		);
 
 		// Description.
@@ -349,9 +366,9 @@ class WPForms_Captcha_Field extends WPForms_Field {
 		$this->field_option(
 			'basic-options',
 			$field,
-			array(
+			[
 				'markup' => 'close',
-			)
+			]
 		);
 
 		/*
@@ -362,18 +379,18 @@ class WPForms_Captcha_Field extends WPForms_Field {
 		$this->field_option(
 			'advanced-options',
 			$field,
-			array(
+			[
 				'markup' => 'open',
-			)
+			]
 		);
 
 		// Size.
 		$this->field_option(
 			'size',
 			$field,
-			array(
-				'class' => 'math' === $format ? 'wpforms-hidden' : '',
-			)
+			[
+				'class' => $format === 'math' ? 'wpforms-hidden' : '',
+			]
 		);
 
 		// Placeholder.
@@ -389,9 +406,9 @@ class WPForms_Captcha_Field extends WPForms_Field {
 		$this->field_option(
 			'advanced-options',
 			$field,
-			array(
+			[
 				'markup' => 'close',
-			)
+			]
 		);
 	}
 
@@ -405,24 +422,26 @@ class WPForms_Captcha_Field extends WPForms_Field {
 	public function field_preview( $field ) {
 
 		// Define data.
-		$placeholder = ! empty( $field['placeholder'] ) ? esc_attr( $field['placeholder'] ) : '';
+		$placeholder = ! empty( $field['placeholder'] ) ? $field['placeholder'] : '';
 		$format      = ! empty( $field['format'] ) ? $field['format'] : 'math';
 		$num1        = wp_rand( $this->math['min'], $this->math['max'] );
 		$num2        = wp_rand( $this->math['min'], $this->math['max'] );
 		$cal         = $this->math['cal'][ wp_rand( 0, count( $this->math['cal'] ) - 1 ) ];
-		$qs          = ! empty( $field['questions'] ) ? $field['questions'] : $this->qs;
+		$questions   = ! empty( $field['questions'] ) ? $field['questions'] : $this->qs;
 
 		// Label.
 		$this->field_preview_option( 'label', $field );
+
+		$first_question = array_shift( $questions );
 		?>
 
-		<div class="format-selected-<?php echo $format; ?> format-selected">
+		<div class="format-selected-<?php echo esc_attr( $format ); ?> format-selected">
 
-			<span class="wpforms-equation"><?php echo "$num1 $cal $num2 = "; ?></span>
+			<span class="wpforms-equation"><?php echo esc_html( "$num1 $cal $num2 = " ); ?></span>
 
-			<p class="wpforms-question"><?php echo $qs[1]['question']; ?></p>
+			<p class="wpforms-question"><?php echo wp_kses( $first_question['question'], wpforms_builder_preview_get_allowed_tags() ); ?></p>
 
-			<input type="text" placeholder="<?php echo $placeholder; ?>" class="primary-input" disabled>
+			<input type="text" placeholder="<?php echo esc_attr( $placeholder ); ?>" class="primary-input" disabled>
 
 		</div>
 
@@ -443,11 +462,10 @@ class WPForms_Captcha_Field extends WPForms_Field {
 	public function field_display( $field, $deprecated, $form_data ) {
 
 		// Define data.
-		$field_id = absint( $field['id'] );
-		$primary  = $field['properties']['inputs']['primary'];
-		$format   = $form_data['fields'][ $field_id ]['format'];
+		$primary = $field['properties']['inputs']['primary'];
+		$format  = $form_data['fields'][ $field['id'] ]['format'];
 
-		if ( 'math' === $format ) {
+		if ( $format === 'math' ) {
 			// Math Captcha.
 			?>
 			<div class="wpforms-captcha-math">
@@ -464,29 +482,33 @@ class WPForms_Captcha_Field extends WPForms_Field {
 					$primary['required']
 				);
 				?>
-				<input type="hidden" name="wpforms[fields][<?php echo $field_id; ?>][cal]" class="cal">
-				<input type="hidden" name="wpforms[fields][<?php echo $field_id; ?>][n2]" class="n2">
-				<input type="hidden" name="wpforms[fields][<?php echo $field_id; ?>][n1]" class="n1">
+				<input type="hidden" name="wpforms[fields][<?php echo (int) $field['id']; ?>][cal]" class="cal">
+				<input type="hidden" name="wpforms[fields][<?php echo (int) $field['id']; ?>][n2]" class="n2">
+				<input type="hidden" name="wpforms[fields][<?php echo (int) $field['id']; ?>][n1]" class="n1">
 			</div>
 			<?php
 		} else {
 			// Question and Answer captcha.
 			$qid = $this->random_question( $field, $form_data );
-			$q   = esc_html( $form_data['fields'][ $field_id ]['questions'][ $qid ]['question'] );
-			$a   = esc_attr( $form_data['fields'][ $field_id ]['questions'][ $qid ]['answer'] );
+			$q   = $form_data['fields'][ $field['id'] ]['questions'][ $qid ]['question'];
 			?>
-			<p class="wpforms-captcha-question"><?php echo $q; ?></p>
+
+			<p class="wpforms-captcha-question"><?php echo esc_html( $q ); ?></p>
+
 			<?php
-			$primary['data']['a'] = $a;
+			$primary['data']['a'] = esc_attr( $form_data['fields'][ $field['id'] ]['questions'][ $qid ]['answer'] );
+
 			printf(
 				'<input type="text" %s %s>',
 				wpforms_html_attributes( $primary['id'], $primary['class'], $primary['data'], $primary['attr'] ),
 				$primary['required']
 			);
 			?>
-			<input type="hidden" name="wpforms[fields][<?php echo $field_id; ?>][q]" value="<?php echo $qid; ?>">
+
+			<input type="hidden" name="wpforms[fields][<?php echo (int) $field['id']; ?>][q]" value="<?php echo esc_attr( $qid ); ?>">
+
 			<?php
-		} // End if().
+		}
 	}
 
 	/**
@@ -518,7 +540,7 @@ class WPForms_Captcha_Field extends WPForms_Field {
 	}
 
 	/**
-	 * Validates field on form submit.
+	 * Validate field on form submit.
 	 *
 	 * @since 1.0.0
 	 *
@@ -529,11 +551,11 @@ class WPForms_Captcha_Field extends WPForms_Field {
 	public function validate( $field_id, $field_submit, $form_data ) {
 
 		// Math captcha.
-		if ( 'math' === $form_data['fields'][ $field_id ]['format'] ) {
+		if ( $form_data['fields'][ $field_id ]['format'] === 'math' ) {
 
 			// All calculation fields are required.
 			if (
-				( empty( $field_submit['a'] ) && '0' !== $field_submit['a'] ) ||
+				( empty( $field_submit['a'] ) && $field_submit['a'] !== '0' ) ||
 				empty( $field_submit['n1'] ) ||
 				empty( $field_submit['cal'] ) ||
 				empty( $field_submit['n2'] )
@@ -568,7 +590,7 @@ class WPForms_Captcha_Field extends WPForms_Field {
 			}
 		}
 
-		if ( 'qa' === $form_data['fields'][ $field_id ]['format'] ) {
+		if ( $form_data['fields'][ $field_id ]['format'] === 'qa' ) {
 
 			// All fields are required.
 			if ( empty( $field_submit['q'] ) || empty( $field_submit['a'] ) ) {
@@ -583,6 +605,24 @@ class WPForms_Captcha_Field extends WPForms_Field {
 				return;
 			}
 		}
+	}
+
+	/**
+	 * Dont display captcha field on the entry edit admin page.
+	 *
+	 * @since 1.3.1
+	 *
+	 * @param array $fields Do not display fields.
+	 *
+	 * @return array Do not display fields with this field included.
+	 */
+	public function entries_edit_fields_dont_display( $fields ) {
+
+		$fields = (array) $fields;
+
+		array_push( $fields, $this->type );
+
+		return $fields;
 	}
 }
 

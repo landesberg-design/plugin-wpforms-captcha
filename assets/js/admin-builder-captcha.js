@@ -23,7 +23,7 @@ var WPFormsCaptcha = window.WPFormsCaptcha || ( function( document, window, $ ) 
 		 */
 		init: function() {
 
-			$( document ).ready( app.ready );
+			$( app.ready );
 		},
 
 		/**
@@ -42,13 +42,12 @@ var WPFormsCaptcha = window.WPFormsCaptcha || ( function( document, window, $ ) 
 				var $this = $( this ),
 					value = $this.val(),
 					id    = $this.parent().data( 'field-id' );
-
 				if ( value === 'math') {
-					$( '#wpforms-field-option-row-'+id+'-questions' ).hide();
-					$( '#wpforms-field-option-row-'+id+'-size' ).hide();
+					$( '#wpforms-field-option-row-' + id + '-questions' ).hide().addClass( 'wpforms-hidden' );
+					$( '#wpforms-field-option-row-' + id + '-size' ).hide();
 				} else {
-					$( '#wpforms-field-option-row-'+id+'-questions' ).show();
-					$( '#wpforms-field-option-row-'+id+'-size' ).show();
+					$( '#wpforms-field-option-row-' + id + '-questions' ).show().removeClass( 'wpforms-hidden' );
+					$( '#wpforms-field-option-row-' + id + '-size' ).show();
 				}
 			});
 
