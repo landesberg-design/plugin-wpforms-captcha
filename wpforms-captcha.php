@@ -7,7 +7,7 @@
  * Requires PHP:      5.5
  * Author:            WPForms
  * Author URI:        https://wpforms.com
- * Version:           1.3.1
+ * Version:           1.3.2
  * Text Domain:       wpforms-captcha
  * Domain Path:       languages
  *
@@ -31,7 +31,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 // Plugin version.
-define( 'WPFORMS_CAPTCHA_VERSION', '1.3.1' );
+define( 'WPFORMS_CAPTCHA_VERSION', '1.3.2' );
 
 /**
  * Load the provider class.

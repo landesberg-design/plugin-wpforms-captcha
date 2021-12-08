@@ -26,42 +26,46 @@ msgstr ""
 msgid "11"
 msgstr ""
 
-#: class-captcha.php:118
+#: class-captcha.php:121
 msgid "Incorrect answer."
 msgstr ""
 
-#: class-captcha.php:297
-msgid "Type"
-msgstr ""
-
-#: class-captcha.php:298
-msgid "Select type of captcha to use."
+#: class-captcha.php:158
+msgid "Custom Captcha field should contain at least one not empty question."
 msgstr ""
 
 #: class-captcha.php:309
-msgid "Math"
+msgid "Type"
 msgstr ""
 
 #: class-captcha.php:310
+msgid "Select type of captcha to use."
+msgstr ""
+
+#: class-captcha.php:321
+msgid "Math"
+msgstr ""
+
+#: class-captcha.php:322
 msgid "Question and Answer"
 msgstr ""
 
-#: class-captcha.php:331
+#: class-captcha.php:343
 msgid "Questions and Answers"
 msgstr ""
 
-#: class-captcha.php:332
+#: class-captcha.php:344
 msgid "Add questions to ask the user. Questions are randomly selected."
 msgstr ""
 
-#: class-captcha.php:345
+#: class-captcha.php:362
 msgid "Question"
 msgstr ""
 
-#: class-captcha.php:347
+#: class-captcha.php:370
 msgid "Answer"
 msgstr ""
 
-#: class-captcha.php:587, class-captcha.php:603
+#: class-captcha.php:642, class-captcha.php:667
 msgid "Incorrect answer"
 msgstr ""

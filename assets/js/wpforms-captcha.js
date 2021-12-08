@@ -4,7 +4,7 @@
  * WPForms Custom Captcha function.
  *
  * @since 1.1.0
-*/
+ */
 var WPFormsCaptcha = window.WPFormsCaptcha || ( function( document, window, $ ) {
 
 	'use strict';

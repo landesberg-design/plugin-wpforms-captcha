@@ -1,10 +1,19 @@
 Change Log
-All notable changes to this project will be documented in this file, formatted via [this recommendation](http://keepachangelog.com/).
+All notable changes to this project will be documented in this file, formatted via [this recommendation](https://keepachangelog.com/).
+
+## [1.3.2] - 2021-09-07
+## Changed
+- Prevent saving empty values for "Question and Answer" Captcha fields.
+
+## Fixed
+- Compatibility with WPForms 1.6.8 and the updated Form Builder.
+- Incorrect "Math" Captcha preview in the Block Editor (Gutenberg).
+- Incorrect "Question and Answer" Captcha preview in Builder.
 
 ## [1.3.1] - 2021-03-31
 ### Fixed
-- Empty Form Builder preview when "Questions and Answer" type has been selected and first question has been removed.
-- "Questions and Answers" section may not be displayed for some users in the Form Builder when "Questions and Answers" type has been selected.
+- Empty Form Builder preview when the "Questions and Answer" type has been selected and the first question has been removed.
+- "Questions and Answers" section may not be displayed for some users in the Form Builder when the "Questions and Answers" type has been selected.
 
 ## [1.3.0] - 2019-07-23
 ### Added
