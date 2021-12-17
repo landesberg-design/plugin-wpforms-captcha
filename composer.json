@@ -1,5 +1,5 @@
 {
-    "name": "not-a-robot-agency/plugin-wpforms-captcha",
+    "name": "not-a-robot-agency/wpforms-captcha",
     "type": "wordpress-plugin",
     "description": "",
     "require": {
