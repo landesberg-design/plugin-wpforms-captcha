@@ -1,4 +1,4 @@
-# Copyright (C) 2021 WPForms Custom Captcha
+# Copyright (C) 2022 WPForms Custom Captcha
 # This file is distributed under the same license as the WPForms Custom Captcha package.
 msgid ""
 msgstr ""

@@ -1,11 +1,16 @@
 Change Log
 All notable changes to this project will be documented in this file, formatted via [this recommendation](https://keepachangelog.com/).
 
+## [1.4.0] - 2022-03-16
+### Added
+- Compatibility with WPForms 1.7.1 and displaying the field on Entry Edit page.
+- Compatibility with WPForms 1.7.3 and Form Revisions.
+
 ## [1.3.2] - 2021-09-07
-## Changed
+### Changed
 - Prevent saving empty values for "Question and Answer" Captcha fields.
 
-## Fixed
+### Fixed
 - Compatibility with WPForms 1.6.8 and the updated Form Builder.
 - Incorrect "Math" Captcha preview in the Block Editor (Gutenberg).
 - Incorrect "Question and Answer" Captcha preview in Builder.

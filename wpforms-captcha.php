@@ -3,11 +3,11 @@
  * Plugin Name:       WPForms Custom Captcha
  * Plugin URI:        https://wpforms.com
  * Description:       Captcha fields with WPForms.
- * Requires at least: 4.9
- * Requires PHP:      5.5
+ * Requires at least: 5.2
+ * Requires PHP:      5.6
  * Author:            WPForms
  * Author URI:        https://wpforms.com
- * Version:           1.3.2
+ * Version:           1.4.0
  * Text Domain:       wpforms-captcha
  * Domain Path:       languages
  *
@@ -31,7 +31,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 // Plugin version.
-define( 'WPFORMS_CAPTCHA_VERSION', '1.3.2' );
+define( 'WPFORMS_CAPTCHA_VERSION', '1.4.0' );
 
 /**
  * Load the provider class.

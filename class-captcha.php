@@ -73,7 +73,7 @@ class WPForms_Captcha_Field extends WPForms_Field {
 		add_filter( 'wpforms_field_properties_captcha', [ $this, 'field_properties' ], 5, 3 );
 
 		// Dont display this field on the entry edit admin page.
-		add_filter( 'wpforms_pro_admin_entries_edit_fields_dont_display', [ $this, 'entries_edit_fields_dont_display' ] );
+		add_filter( "wpforms_pro_admin_entries_edit_is_field_displayable_{$this->type}", '__return_false' );
 
 		// Ignore the field inside the entry preview field.
 		add_filter( 'wpforms_pro_fields_entry_preview_get_ignored_fields', [ $this, 'ignore_entry_preview' ] );
@@ -672,9 +672,10 @@ class WPForms_Captcha_Field extends WPForms_Field {
 	}
 
 	/**
-	 * Dont display captcha field on the entry edit admin page.
+	 * Don't display captcha field on the entry edit admin page.
 	 *
 	 * @since 1.3.1
+     * @deprecated 1.4.0
 	 *
 	 * @param array $fields Do not display fields.
 	 *
@@ -682,9 +683,17 @@ class WPForms_Captcha_Field extends WPForms_Field {
 	 */
 	public function entries_edit_fields_dont_display( $fields ) {
 
-		$fields = (array) $fields;
+		_deprecated_function(
+			__FUNCTION__,
+			'1.4.0 of the WPForms plugin',
+			sprintf(
+				'Use the wpforms_pro_admin_entries_edit_is_field_displayable_%s hook instead',
+				esc_attr( $this->type )
+			)
+		);
 
-		array_push( $fields, $this->type );
+		$fields   = (array) $fields;
+		$fields[] = $this->type;
 
 		return $fields;
 	}
