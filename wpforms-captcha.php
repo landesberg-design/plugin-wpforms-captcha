@@ -7,7 +7,7 @@
  * Requires PHP:      5.6
  * Author:            WPForms
  * Author URI:        https://wpforms.com
- * Version:           1.4.0
+ * Version:           1.6.0
  * Text Domain:       wpforms-captcha
  * Domain Path:       languages
  *
@@ -30,8 +30,10 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
+// phpcs:disable WPForms.Comments.PHPDocDefine.MissPHPDoc
 // Plugin version.
-define( 'WPFORMS_CAPTCHA_VERSION', '1.4.0' );
+define( 'WPFORMS_CAPTCHA_VERSION', '1.6.0' );
+// phpcs:enable WPForms.Comments.PHPDocDefine.MissPHPDoc
 
 /**
  * Load the provider class.
@@ -39,17 +41,101 @@ define( 'WPFORMS_CAPTCHA_VERSION', '1.4.0' );
  * @since 1.0.0
  */
 function wpforms_captcha() {
-
-	// WPForms Pro is required.
-	if ( ! wpforms()->pro ) {
+	// Check requirements.
+	if ( ! wpforms_captcha_required() ) {
 		return;
 	}
 
-	load_plugin_textdomain( 'wpforms-captcha', false, dirname( plugin_basename( __FILE__ ) ) . '/languages/' );
-
 	require_once plugin_dir_path( __FILE__ ) . 'class-captcha.php';
 }
+
 add_action( 'wpforms_loaded', 'wpforms_captcha' );
+
+/**
+ * Check requirements.
+ *
+ * @since 1.6.0
+ */
+function wpforms_captcha_required() {
+
+	if ( PHP_VERSION_ID < 50600 ) {
+		add_action( 'admin_notices', 'wpforms_captcha_fail_php_version' );
+
+		return false;
+	}
+
+	if ( ! function_exists( 'wpforms' ) ) {
+		return false;
+	}
+
+	if ( version_compare( wpforms()->version, '1.7.5', '<' ) ) {
+		add_action( 'admin_notices', 'wpforms_captcha_fail_wpforms_version' );
+		add_action( 'admin_init', 'wpforms_captcha_deactivation' );
+
+		return false;
+	}
+
+	if (
+		! function_exists( 'wpforms_get_license_type' ) ||
+		! in_array( wpforms_get_license_type(), [ 'basic', 'plus', 'pro', 'elite', 'agency', 'ultimate' ], true )
+	) {
+		return false;
+	}
+
+	return true;
+}
+
+/**
+ * Admin notice for a minimum PHP version.
+ *
+ * @since 1.6.0
+ */
+function wpforms_captcha_fail_php_version() {
+
+	echo '<div class="notice notice-error"><p>';
+	printf(
+		wp_kses( /* translators: %s - WPForms.com documentation page URI. */
+			__( 'The WPForms Custom Captcha plugin has been deactivated. Your site is running an outdated version of PHP that is no longer supported and is not compatible with the plugin. <a href="%s" target="_blank" rel="noopener noreferrer">Read more</a> for additional information.', 'wpforms-captcha' ),
+			[
+				'a' => [
+					'href'   => [],
+					'rel'    => [],
+					'target' => [],
+				],
+			]
+		),
+		esc_url( wpforms_utm_link( 'https://wpforms.com/docs/supported-php-version/', 'all-plugins', 'Custom Captcha PHP Notice' ) )
+	);
+	echo '</p></div>';
+}
+
+/**
+ * Admin notice for minimum WPForms version.
+ *
+ * @since 1.6.0
+ */
+function wpforms_captcha_fail_wpforms_version() {
+
+	echo '<div class="notice notice-error"><p>';
+	esc_html_e( 'The WPForms Custom Captcha plugin has been deactivated, because it requires WPForms v1.7.5 or later to work.', 'wpforms-captcha' );
+	echo '</p></div>';
+}
+
+/**
+ * Deactivate the plugin.
+ *
+ * @since 1.6.0
+ */
+function wpforms_captcha_deactivation() {
+
+	deactivate_plugins( plugin_basename( __FILE__ ) );
+
+	// phpcs:disable WordPress.Security.NonceVerification.Recommended
+	if ( isset( $_GET['activate'] ) ) {
+		unset( $_GET['activate'] );
+	}
+	// phpcs:enable WordPress.Security.NonceVerification.Recommended
+}
 
 /**
  * Load the plugin updater.

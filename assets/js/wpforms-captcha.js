@@ -26,6 +26,10 @@ var WPFormsCaptcha = window.WPFormsCaptcha || ( function( document, window, $ ) 
 		init: function() {
 
 			$( app.ready );
+
+			$( document ).on( 'elementor/popup/show', function() {
+				app.ready();
+			} );
 		},
 
 		/**

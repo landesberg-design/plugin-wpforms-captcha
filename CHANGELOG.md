@@ -1,9 +1,27 @@
 Change Log
 All notable changes to this project will be documented in this file, formatted via [this recommendation](https://keepachangelog.com/).
 
+## [1.6.0] - 2022-09-21
+## Added
+- Custom Captcha's "Math" type is now supported and works properly inside Elementor popups.
+
+### Changed
+- Minimum WPForms version is now 1.7.5.
+
+## Fixed
+- Empty questions and answers had incorrect validation.
+
+## [1.5.0] - 2022-08-29
+### Changed
+- Do not add a second question with an empty question and answer values that were added by default.
+- Empty questions are now removed from the list on form save.
+
+### Fixed
+- Implemented various fixes to prevent questions with an empty question or answer values from being saved or displayed.
+
 ## [1.4.0] - 2022-03-16
 ### Added
-- Compatibility with WPForms 1.7.1 and displaying the field on Entry Edit page.
+- Compatibility with WPForms 1.7.1 to avoid displaying Captcha field on Edit Entry page.
 - Compatibility with WPForms 1.7.3 and Form Revisions.
 
 ## [1.3.2] - 2021-09-07

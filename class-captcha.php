@@ -48,10 +48,6 @@ class WPForms_Captcha_Field extends WPForms_Field {
 				'question' => esc_html__( 'What is 7+4?', 'wpforms-captcha' ),
 				'answer'   => esc_html__( '11', 'wpforms-captcha' ),
 			],
-			2 => [
-				'question' => '',
-				'answer'   => '',
-			],
 		];
 
 		// Apply wpforms_math_captcha filters when theme functions.php is loaded.
@@ -66,17 +62,20 @@ class WPForms_Captcha_Field extends WPForms_Field {
 		// Remove the field from saved data.
 		add_filter( 'wpforms_process_after_filter', [ $this, 'process_remove_field' ], 10, 3 );
 
-		// Set field to default to required.
+		// Set field as required by default.
 		add_filter( 'wpforms_field_new_required', [ $this, 'field_default_required' ], 10, 2 );
 
 		// Define additional field properties.
 		add_filter( 'wpforms_field_properties_captcha', [ $this, 'field_properties' ], 5, 3 );
 
-		// Dont display this field on the entry edit admin page.
+		// Do not display this field on the entry edit admin page.
 		add_filter( "wpforms_pro_admin_entries_edit_is_field_displayable_{$this->type}", '__return_false' );
 
 		// Ignore the field inside the entry preview field.
 		add_filter( 'wpforms_pro_fields_entry_preview_get_ignored_fields', [ $this, 'ignore_entry_preview' ] );
+
+		// Remove empty values before saving the form in Form Builder.
+		add_filter( 'wpforms_save_form_args', [ $this, 'save_form' ], 11, 3 );
 	}
 
 	/**
@@ -261,6 +260,45 @@ class WPForms_Captcha_Field extends WPForms_Field {
 	}
 
 	/**
+	 * Pre-process field data before saving it in form_data when editing form.
+	 *
+	 * @since 1.5.0
+	 *
+	 * @param array $form Form array, usable with wp_update_post.
+	 * @param array $data Data retrieved from $_POST and processed.
+	 * @param array $args Update form arguments.
+	 *
+	 * @return array
+	 */
+	public function save_form( $form, $data, $args ) {
+
+		$form_data = json_decode( stripslashes( $form['post_content'] ), true );
+
+		if ( empty( $form_data['fields'] ) ) {
+			return $form;
+		}
+
+		foreach ( (array) $form_data['fields'] as $key => $field ) {
+
+			if ( empty( $field['type'] ) || $field['type'] !== 'captcha' ) {
+				continue;
+			}
+
+			if ( $field['format'] !== 'qa' ) {
+				continue;
+			}
+
+			$form_data['fields'][ $key ]['questions'] = ! empty( $form_data['fields'][ $key ]['questions'] ) ?
+				$this->remove_empty_questions( $form_data['fields'][ $key ]['questions'] ) :
+				[];
+		}
+
+		$form['post_content'] = wpforms_encode( $form_data );
+
+		return $form;
+	}
+
+	/**
 	 * Field options panel inside the builder.
 	 *
 	 * @since 1.0.0
@@ -272,6 +310,7 @@ class WPForms_Captcha_Field extends WPForms_Field {
 		// Defaults.
 		$format = ! empty( $field['format'] ) ? esc_attr( $field['format'] ) : 'math';
 		$qs     = ! empty( $field['questions'] ) ? $field['questions'] : $this->qs;
+		$qs     = array_filter( $qs );
 
 		// Field is always required.
 		$this->field_element(
@@ -536,6 +575,16 @@ class WPForms_Captcha_Field extends WPForms_Field {
 			</div>
 			<?php
 		} else {
+			// Back-compat: remove invalid questions with empty question or answer value.
+			$form_data['fields'][ $field['id'] ]['questions'] = ! empty( $form_data['fields'][ $field['id'] ]['questions'] ) ?
+				$this->remove_empty_questions( $form_data['fields'][ $field['id'] ]['questions'] ) :
+				[];
+
+			// Do not output the field if, for some reason, all questions have been filtered out as invalid.
+			if ( empty( $form_data['fields'][ $field['id'] ]['questions'] ) ) {
+				return;
+			}
+
 			// Question and Answer captcha.
 			$qid = $this->random_question( $field, $form_data );
 			$q   = $form_data['fields'][ $field['id'] ]['questions'][ $qid ]['question'];
@@ -712,6 +761,28 @@ class WPForms_Captcha_Field extends WPForms_Field {
 		$fields[] = $this->type;
 
 		return $fields;
+	}
+
+	/**
+	 * Remove invalid questions - with empty question and/or answer value.
+	 *
+	 * @since 1.5.0
+	 *
+	 * @param array $questions All questions and answers.
+	 *
+	 * @return array
+	 */
+	private function remove_empty_questions( $questions ) {
+
+		return array_filter(
+			$questions,
+			static function( $question ) {
+
+				return isset( $question['question'], $question['answer'] ) &&
+					   ! wpforms_is_empty_string( $question['question'] ) &&
+					   ! wpforms_is_empty_string( $question['answer'] );
+			}
+		);
 	}
 }
 
