@@ -7,7 +7,7 @@
  * Requires PHP:      5.6
  * Author:            WPForms
  * Author URI:        https://wpforms.com
- * Version:           1.6.0
+ * Version:           1.7.0
  * Text Domain:       wpforms-captcha
  * Domain Path:       languages
  *
@@ -32,7 +32,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 // phpcs:disable WPForms.Comments.PHPDocDefine.MissPHPDoc
 // Plugin version.
-define( 'WPFORMS_CAPTCHA_VERSION', '1.6.0' );
+define( 'WPFORMS_CAPTCHA_VERSION', '1.7.0' );
 // phpcs:enable WPForms.Comments.PHPDocDefine.MissPHPDoc
 
 /**

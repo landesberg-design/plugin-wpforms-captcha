@@ -1,5 +1,7 @@
 /* global wpforms_captcha */
 
+'use strict';
+
 /**
  * WPForms Custom Captcha function.
  *
@@ -7,14 +9,12 @@
  */
 var WPFormsCaptcha = window.WPFormsCaptcha || ( function( document, window, $ ) {
 
-	'use strict';
-
 	/**
 	 * Public functions and properties.
 	 *
 	 * @since 1.1.0
 	 *
-	 * @type object
+	 * @type {object}
 	 */
 	var app = {
 
@@ -27,7 +27,8 @@ var WPFormsCaptcha = window.WPFormsCaptcha || ( function( document, window, $ ) 
 
 			$( app.ready );
 
-			$( document ).on( 'elementor/popup/show', function() {
+			window.addEventListener( 'elementor/popup/show', function() {
+
 				app.ready();
 			} );
 		},
@@ -56,14 +57,14 @@ var WPFormsCaptcha = window.WPFormsCaptcha || ( function( document, window, $ ) 
 				$captcha.find( 'input.a' ).attr( {
 					'data-cal': calc,
 					'data-n1': n1,
-					'data-n2': n2
+					'data-n2': n2,
 				} );
-			});
+			} );
 
 			// Reload after OptinMonster is loaded.
 			$( document ).on( 'OptinMonsterAfterInject', function() {
 				app.ready();
-			});
+			} );
 
 			// Load custom validation.
 			app.loadValidation();
@@ -86,6 +87,7 @@ var WPFormsCaptcha = window.WPFormsCaptcha || ( function( document, window, $ ) 
 					var a, res;
 
 					if ( 'math' === param ) {
+
 						// Math captcha.
 						var n1  = Number( $ele.attr( 'data-n1' ) ),
 							n2  = Number( $ele.attr( 'data-n2' ) ),
@@ -106,6 +108,7 @@ var WPFormsCaptcha = window.WPFormsCaptcha || ( function( document, window, $ ) 
 								break;
 						}
 					} else {
+
 						// Question answer captcha.
 						a   = $.trim( value.toString().toLowerCase() );
 						res = $.trim( $ele.attr( 'data-a' ).toString().toLowerCase() );
@@ -122,21 +125,21 @@ var WPFormsCaptcha = window.WPFormsCaptcha || ( function( document, window, $ ) 
 		 *
 		 * @since 1.0.0
 		 *
-		 * @param int $min Max number.
-		 * @param int $max Max number.
+		 * @param {integer} min Max number.
+		 * @param {integer} max Max number.
 		 *
-		 * @return int
+		 * @returns {number} Random number.
 		 */
 		randomNumber: function( min, max ) {
 
-			return Math.floor( Math.random() * ( Number( max ) - Number( min ) + 1) ) + Number( min );
-		}
+			return Math.floor( Math.random() * ( Number( max ) - Number( min ) + 1 ) ) + Number( min );
+		},
 	};
 
 	// Provide access to public functions/properties.
 	return app;
 
-})( document, window, jQuery );
+} )( document, window, jQuery );
 
 // Initialize.
 WPFormsCaptcha.init();

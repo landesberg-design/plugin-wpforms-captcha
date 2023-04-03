@@ -1,6 +1,13 @@
 Change Log
 All notable changes to this project will be documented in this file, formatted via [this recommendation](https://keepachangelog.com/).
 
+## [1.7.0] - 2023-03-13
+### Added
+- Compatibility with the upcoming WPForms 1.8.1.
+
+### Fixed
+- Improved compatibility with Elementor popups v3.9+.
+
 ## [1.6.0] - 2022-09-21
 ## Added
 - Custom Captcha's "Math" type is now supported and works properly inside Elementor popups.

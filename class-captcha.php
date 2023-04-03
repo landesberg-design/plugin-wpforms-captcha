@@ -184,6 +184,9 @@ class WPForms_Captcha_Field extends WPForms_Field {
 		// Input Primary: type dat attr.
 		$properties['inputs']['primary']['data']['rule-wpf-captcha'] = $format;
 
+		// Input Primary: mark this field as wrapped.
+		$properties['inputs']['primary']['data']['is-wrapped-field'] = true;
+
 		return $properties;
 	}
 
@@ -525,14 +528,17 @@ class WPForms_Captcha_Field extends WPForms_Field {
 	public function field_display( $field, $deprecated, $form_data ) {
 
 		// Define data.
-		$primary = $field['properties']['inputs']['primary'];
-		$format  = $form_data['fields'][ $field['id'] ]['format'];
+		$primary                             = $field['properties']['inputs']['primary'];
+		$format                              = $form_data['fields'][ $field['id'] ]['format'];
+		$field_id                            = "wpforms-{$form_data['id']}-field_{$field['id']}";
+		$desc_id                             = "{$field_id}-question";
+		$primary['attr']['aria-describedby'] = empty( $primary['attr']['aria-describedby'] ) ? $desc_id : $primary['attr']['aria-describedby'] . ' ' . $desc_id;
 
 		if ( $format === 'math' ) {
 			// Math Captcha.
 			?>
 			<div class="wpforms-captcha-math">
-				<span class="wpforms-captcha-equation">
+				<span <?php echo wpforms_html_attributes( $desc_id, [ 'wpforms-captcha-equation' ] ); ?>>
 					<?php
 
 					if ( defined( 'REST_REQUEST' ) || is_admin() || wp_doing_ajax() ) {
@@ -588,9 +594,13 @@ class WPForms_Captcha_Field extends WPForms_Field {
 			// Question and Answer captcha.
 			$qid = $this->random_question( $field, $form_data );
 			$q   = $form_data['fields'][ $field['id'] ]['questions'][ $qid ]['question'];
-			?>
 
-			<p class="wpforms-captcha-question"><?php echo esc_html( $q ); ?></p>
+			printf(
+				'<p %s>%s</p>',
+				wpforms_html_attributes( $desc_id, [ 'wpforms-captcha-question' ] ),
+				esc_html( $q )
+			);
+			?>
 
 			<?php
 			$primary['data']['a'] = esc_attr( $form_data['fields'][ $field['id'] ]['questions'][ $qid ]['answer'] );
