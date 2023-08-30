@@ -1,6 +1,13 @@
 Change Log
 All notable changes to this project will be documented in this file, formatted via [this recommendation](https://keepachangelog.com/).
 
+## [1.8.0] - 2023-08-15
+### Added
+- The Captcha field in the Form Builder can now be searched by name or related keywords.
+
+### Changed
+- Minimum WPForms version supported is 1.8.3.
+
 ## [1.7.0] - 2023-03-13
 ### Added
 - Compatibility with the upcoming WPForms 1.8.1.

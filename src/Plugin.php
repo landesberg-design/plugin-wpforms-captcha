@@ -1,22 +1,18 @@
 <?php
-/**
- * Main plugin file.
- *
- * @deprecated 1.8.0 Moved to /scr/Plugin.php
- */
-
-_deprecated_file( __FILE__,  '1.8.0 of the WPForms Custom Captcha addon', __DIR__ . '/scr/Plugin.php' );
-
 // phpcs:ignore Generic.Commenting.DocComment.MissingShort
 /** @noinspection AutoloadingIssuesInspection */
+
+namespace WPFormsCaptcha;
+
+use WPForms_Field;
+use WPForms_Updater;
 
 /**
  * Captcha field.
  *
  * @since 1.0.0
- * @deprecated 1.8.0
  */
-class WPForms_Captcha_Field extends WPForms_Field {
+class Plugin extends WPForms_Field {
 
 	/**
 	 * Min & max values to participate in equation and operators.
@@ -41,7 +37,7 @@ class WPForms_Captcha_Field extends WPForms_Field {
 	 *
 	 * @since 1.8.0
 	 *
-	 * @return WPForms_Captcha_Field
+	 * @return Plugin
 	 */
 	public static function get_instance() {
 
@@ -172,7 +168,7 @@ class WPForms_Captcha_Field extends WPForms_Field {
 
 			wp_enqueue_script(
 				'wpforms-captcha',
-				plugin_dir_url( __FILE__ ) . "assets/js/wpforms-captcha{$min}.js",
+				WPFORMS_CAPTCHA_URL . "assets/js/wpforms-captcha{$min}.js",
 				[ 'jquery', 'wpforms' ],
 				WPFORMS_CAPTCHA_VERSION,
 				true
@@ -201,7 +197,7 @@ class WPForms_Captcha_Field extends WPForms_Field {
 		// JavaScript.
 		wp_enqueue_script(
 			'wpforms-builder-custom-captcha',
-			plugin_dir_url( __FILE__ ) . "assets/js/admin-builder-captcha{$min}.js",
+			WPFORMS_CAPTCHA_URL . "assets/js/admin-builder-captcha{$min}.js",
 			[ 'jquery', 'wpforms-builder' ],
 			WPFORMS_CAPTCHA_VERSION
 		);
@@ -209,7 +205,7 @@ class WPForms_Captcha_Field extends WPForms_Field {
 		// CSS.
 		wp_enqueue_style(
 			'wpforms-builder-custom-captcha',
-			plugin_dir_url( __FILE__ ) . "assets/css/admin-builder-captcha{$min}.css",
+			WPFORMS_CAPTCHA_URL . "assets/css/admin-builder-captcha{$min}.css",
 			[],
 			WPFORMS_CAPTCHA_VERSION
 		);
@@ -727,7 +723,7 @@ class WPForms_Captcha_Field extends WPForms_Field {
 	 * @param array $field_submit Submitted field value.
 	 * @param array $form_data    Form data and settings.
 	 */
-	public function validate( $field_id, $field_submit, $form_data ) {
+	public function validate( $field_id, $field_submit, $form_data ) { // phpcs:ignore Generic.Metrics.CyclomaticComplexity.TooHigh
 
 		// Math captcha.
 		if ( $form_data['fields'][ $field_id ]['format'] === 'math' ) {

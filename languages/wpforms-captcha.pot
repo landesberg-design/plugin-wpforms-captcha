@@ -7,7 +7,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Language-Team: WPForms <support@wpforms.com>\n"
-"POT-Creation-Date: 2023-03-13 10:43+0000\n"
+"POT-Creation-Date: 2023-08-15 11:31+0000\n"
 "X-Poedit-Basepath: ..\n"
 "X-Poedit-KeywordsList: __;_e;_ex:1,2c;_n:1,2;_n_noop:1,2;_nx:1,2,4c;_nx_noop:1,2,3c;_x:1,2c;esc_attr__;esc_attr_e;esc_attr_x:1,2c;esc_html__;esc_html_e;esc_html_x:1,2c\n"
 "X-Poedit-SearchPath-0: .\n"
@@ -15,67 +15,62 @@ msgstr ""
 "X-Poedit-SourceCharset: UTF-8\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
-#: class-captcha.php:36
+#: class-captcha.php:65, src/Plugin.php:61
 msgid "Custom Captcha"
 msgstr ""
 
-#: class-captcha.php:48
+#: class-captcha.php:66, src/Plugin.php:62
+msgid "spam, math, maths, question"
+msgstr ""
+
+#: class-captcha.php:78, src/Plugin.php:74
 msgid "What is 7+4?"
 msgstr ""
 
-#: class-captcha.php:49
+#: class-captcha.php:79, src/Plugin.php:75
 msgid "11"
 msgstr ""
 
-#: class-captcha.php:120
+#: class-captcha.php:185, src/Plugin.php:181
 msgid "Incorrect answer."
 msgstr ""
 
-#: class-captcha.php:157
+#: class-captcha.php:222, src/Plugin.php:218
 msgid "Custom Captcha field should contain at least one not empty question."
 msgstr ""
 
-#: class-captcha.php:351
+#: class-captcha.php:419, src/Plugin.php:415
 msgid "Type"
 msgstr ""
 
-#: class-captcha.php:352
+#: class-captcha.php:420, src/Plugin.php:416
 msgid "Select type of captcha to use."
 msgstr ""
 
-#: class-captcha.php:363
+#: class-captcha.php:431, src/Plugin.php:427
 msgid "Math"
 msgstr ""
 
-#: class-captcha.php:364
+#: class-captcha.php:432, src/Plugin.php:428
 msgid "Question and Answer"
 msgstr ""
 
-#: class-captcha.php:385
+#: class-captcha.php:453, src/Plugin.php:449
 msgid "Questions and Answers"
 msgstr ""
 
-#: class-captcha.php:386
+#: class-captcha.php:454, src/Plugin.php:450
 msgid "Add questions to ask the user. Questions are randomly selected."
 msgstr ""
 
-#: class-captcha.php:404
+#: class-captcha.php:472, src/Plugin.php:468
 msgid "Question"
 msgstr ""
 
-#: class-captcha.php:412
+#: class-captcha.php:480, src/Plugin.php:476
 msgid "Answer"
 msgstr ""
 
-#: class-captcha.php:701, class-captcha.php:726
+#: class-captcha.php:768, class-captcha.php:793, src/Plugin.php:764, src/Plugin.php:789
 msgid "Incorrect answer"
-msgstr ""
-
-#. translators: %s - WPForms.com documentation page URI.
-#: wpforms-captcha.php:98
-msgid "The WPForms Custom Captcha plugin has been deactivated. Your site is running an outdated version of PHP that is no longer supported and is not compatible with the plugin. <a href=\"%s\" target=\"_blank\" rel=\"noopener noreferrer\">Read more</a> for additional information."
-msgstr ""
-
-#: wpforms-captcha.php:120
-msgid "The WPForms Custom Captcha plugin has been deactivated, because it requires WPForms v1.7.5 or later to work."
 msgstr ""
